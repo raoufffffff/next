@@ -42,6 +42,10 @@ export async function getStore(subdomain: string): Promise<StoreResponse | null>
 
         return { store, StoreDlevryPrices };
     } catch (error) {
+      message: error.message,
+        cause: error.cause,      // ← هذا هو المهم
+        code: error.code,
+        name: error.name,
         console.error("getStore Error:", error);
         return null;
     }
@@ -95,4 +99,5 @@ export async function getProduct(id: string, subdomain: string): Promise<product
         console.error("API Error (getProduct):", error);
         return null;
     }
+
 }
