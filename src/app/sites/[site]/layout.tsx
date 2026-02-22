@@ -4,32 +4,32 @@ import Pixels from "@/components/Analytics/Pixels";
 import Header from "@/components/Header";
 import { getStore } from "@/lib/api";
 
+export const dynamic = "force-static";
 export const revalidate = false;
 
-// This layout only lives in [site], so it ONLY gets 'site'.
 interface LayoutParams {
     site: string;
+}
+
+export async function generateStaticParams() {
+    return [];
 }
 
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<LayoutParams>; // Use specific type
+    params: Promise<LayoutParams>;
 }): Promise<Metadata> {
     const { site } = await params;
-
-    // Cast the result to the correct type
     const data = await getStore(site);
     const store = data?.store;
 
     if (!store) {
-        return {
-            title: "Store Not Found",
-        };
+        return { title: "Store Not Found" };
     }
 
     return {
-        title: store.storeName ,
+        title: store.storeName,
         description: `Welcome to ${store.storeName}'s store`,
         icons: {
             icon: store.logo,
@@ -57,15 +57,9 @@ export default async function StoreLayout({
 
     return (
         <div>
-            <Pixels
-                fbId={store.facebookPixel}
-            // tiktokId={store.website.TiktokPixel}
-            />
-
+            <Pixels fbId={store.facebookPixel} />
             <Header store={store} />
-
             <main className="min-h-screen mt-32">{children}</main>
-
             <footer className="p-4 bg-gray-100 text-center mt-10">
                 <p>
                     All rights reserved © {new Date().getFullYear()} {store.storeName}
