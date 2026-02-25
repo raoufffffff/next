@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ProductList from "@/components/ProductList";
 import { getStore } from "@/lib/api";
 import { PageParams, Store } from "@/types";
+import Visit from "@/components/Analytics/Visit";
 
 export const revalidate = false;
 export const dynamic = "force-static";
@@ -46,6 +47,7 @@ export default async function ShopPage({
                 subdomain={site}
                 id={store._id}
             />
+            <Visit image={store.logo} page="home" store={store._id} />
         </div>
     );
 }

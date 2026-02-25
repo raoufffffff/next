@@ -9,6 +9,7 @@ import { CheckCircle } from 'lucide-react';
 // API Helpers
 import { getProduct, getStore } from '@/lib/api';
 import { PageParams } from '@/types';
+import Visit from '@/components/Analytics/Visit';
 
 export const revalidate = false;
 
@@ -67,11 +68,7 @@ export default async function ProductPage({ params }: { params: Promise<PagePara
 
     const {  store, StoreDlevryPrices} = storeData
 
-    // استخراج البيانات حسب هيكلة الـ API الخاص بك
-    // افترضنا هنا أن API المتجر يعيد { result: storeObject, livPrice: ... }
-     // ملاحظة: إذا كان الـ API يعيد { store: ..., livPrice: ... } عدلها هنا
-
-    // 🤖 JSON-LD Schema: لغة التفاهم مع جوجل (لإظهار السعر والتوفر في البحث)
+    
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -121,7 +118,7 @@ export default async function ProductPage({ params }: { params: Promise<PagePara
                             <span className="text-4xl font-extrabold text-indigo-600">
                                 {Number(product?.price).toLocaleString()} د.ج
                             </span>
-                            {product?.Oldprice && (
+                            {Number(product?.Oldprice) > 0  && (
                                 <span className="text-xl text-gray-400 line-through decoration-red-400 decoration-2">
                                     {Number(product.Oldprice).toLocaleString()} د.ج
                                 </span>
@@ -140,10 +137,10 @@ export default async function ProductPage({ params }: { params: Promise<PagePara
                         )}
 
                         {/* Description */}
-                        <div className="prose prose-indigo max-w-none text-right text-gray-600 leading-relaxed">
+                      {product?.ShortDescription &&  <div className="prose prose-indigo max-w-none text-right text-gray-600 leading-relaxed">
                             <h3 className="text-lg font-bold text-gray-900 mb-2">الوصف:</h3>
                             <p>{product?.ShortDescription}</p>
-                        </div>
+                        </div>}
                     </div>
 
                     {/* Extra Note Block (if exists) */}
@@ -153,10 +150,12 @@ export default async function ProductPage({ params }: { params: Promise<PagePara
                         </div>
                     )}
                 </div>
+            <Visit image={product.images[0]} page={product._id || ""} store={storeData.store?._id || ""} />
 
                 {/* 🛒 LEFT COLUMN (Desktop): Sticky Checkout Form (Cols 5) */}
                 <div className="md:col-span-5 h-fit md:sticky md:top-24">
                     <CheckoutForm
+                    beru={store?.enableBureau || false}
                         tiktokp={store?.tiktokPixel?.id  || null}
                         facebookp={store?.facebookPixel?.id  || null}
 user={storeData.store?.user}

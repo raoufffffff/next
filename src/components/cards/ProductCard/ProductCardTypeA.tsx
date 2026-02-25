@@ -49,9 +49,9 @@ className="group relative  rounded-3xl bg-white shadow-md hover:shadow-2xl trans
                                                 <span className="block text-lg font-bold text-gray-900">
                                                     { data.price} دج
                                                 </span>
-                                                     <span className="text-sm text-gray-400 line-through">
+                                                    {Number(data.Oldprice) > 0 && <span className="text-sm text-gray-400 line-through">
                                                         {data.Oldprice}
-                                                    </span>
+                                                    </span>}
                                                 
                                             </div>
                                             <button

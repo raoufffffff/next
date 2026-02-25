@@ -26,7 +26,7 @@ export default function CheckoutForm(props: CheckoutFormProps) {
         formRef, nameInputRef
     } = useCheckoutLogic(props);
 
-    const { mainColor = '#4F46ff', product, StoreDlevryPrices } = props;
+    const { mainColor = '#4F46ff', product, StoreDlevryPrices, beru } = props;
 
     return (
         <div dir="rtl" className="relative font-sans text-right">
@@ -81,11 +81,11 @@ export default function CheckoutForm(props: CheckoutFormProps) {
                         onCityChange={handleInputChange} 
                     />
 
-                    <DeliveryControl 
+                   {beru && <DeliveryControl 
                         formData={formData} 
                         onTypeChange={handleInputChange} 
                         onQtyChange={handleQuantityChange} 
-                    />
+                    />}
 
                     <OrderSummary 
                         freeDelivery={formData.freeDelivery} 

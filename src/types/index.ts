@@ -220,6 +220,7 @@ export interface CheckoutFormData {
 }
 
 export interface CheckoutFormProps {
+    beru: boolean;
     user?: string
     product: product;
     StoreDlevryPrices?: StatePrice[] | null;

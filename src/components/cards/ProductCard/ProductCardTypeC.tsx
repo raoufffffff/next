@@ -45,9 +45,9 @@ const ProductCardTypeC = ({
           <span className="text-xl font-bold text-gray-900">
             {data.price} دج
           </span>
-          <span className="text-sm text-gray-400 line-through">
+         {Number(data.Oldprice) > 0 && <span className="text-sm text-gray-400 line-through">
             {data.Oldprice} دج
-          </span>
+          </span>}
         </div>
 
         {/* Divider */}

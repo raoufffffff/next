@@ -59,7 +59,7 @@ const ProductCardTypeB = ({
             {data.name}
           </h3>
 
-         { data.Oldprice && <div className="flex items-center gap-2 mb-4">
+         { Number(data.Oldprice) > 0  && <div className="flex items-center gap-2 mb-4">
             <span className="text-sm line-through text-gray-400">
               {data.Oldprice} دج
             </span>
