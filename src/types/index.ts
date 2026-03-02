@@ -194,13 +194,16 @@ export interface StateData {
     prix_initial: number;
     stop_back: number;
 }
-
+ 
 export interface CityData {
-    id?: string;
-    wilaya_code: string | number;
-    commune_name: string;
-    daira_name?: string;
-    name?: string;
+  id: 22,
+        commune_name_ascii: string,
+        commune_name: string,
+        daira_name_ascii: string,
+        daira_name: string,
+        wilaya_code: string,
+        wilaya_name_ascii: string,
+        wilaya_name: string
 }
 
 export interface CheckoutFormData {

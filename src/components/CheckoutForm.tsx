@@ -23,7 +23,7 @@ export default function CheckoutForm(props: CheckoutFormProps) {
         colorOptions, sizeOptions, offers,
         setSelectedColor, setSelectedSize, handleOfferSelect,
         handleQuantityChange, handleStateChange, handleInputChange, handleSubmit, handleStickyClick,
-        formRef, nameInputRef
+        formRef, nameInputRef, phoneErr
     } = useCheckoutLogic(props);
 
     const { mainColor = '#4F46ff', product, StoreDlevryPrices, beru } = props;
@@ -61,6 +61,8 @@ export default function CheckoutForm(props: CheckoutFormProps) {
                             required 
                         />
                         <FormInput 
+                        err={phoneErr}
+                        minLength={10}
                             label="رقم الهاتف" 
                             name="phone" 
                             Icon={Phone} 

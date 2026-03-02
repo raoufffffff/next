@@ -48,7 +48,7 @@ export const LocationSelectors = ({ formData, states, availableCities, onStateCh
           >
             <option value="">اختر البلدية...</option>
             {availableCities.map((c) => (
-              <option key={c.id || c.commune_name} value={c.commune_name}>
+              <option key={c.id || c.commune_name} value={c.commune_name_ascii}>
                 {c.commune_name || c.daira_name}
               </option>
             ))}
