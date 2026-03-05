@@ -183,7 +183,7 @@ const validatePhone = (value: string) => {
             };
  console.log(orderPayload);
  
-            await axios.post('http://localhost:5000/api/public/orders', orderPayload);
+            await axios.post('https://api.next-commerce.shop/api/public/orders', orderPayload);
 
             if (facebookp) {
                 fbq.event('Purchase', {
@@ -238,4 +238,5 @@ const validatePhone = (value: string) => {
         nameInputRef,
         phoneErr
     };
+
 };
