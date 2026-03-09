@@ -60,83 +60,83 @@ export interface Category {
 
 export interface Store {
     user: string;
-logo: string;
-      language: string;
-        enableBureau: boolean;
- storeName: string;
-   _id: string;
-   faqs: faqs[];
-   categories: Category[];
-   domain: string;
-   contacts:contacts;
-   header : header;
-   mainColor: string;
-   thanks:thanks;
-   deliveryCompany:deliveryCompany;
-    facebookPixel?:pixel;
-    tiktokPixel?:pixel;
-      ProductCardType: string,
+    logo: string;
+    language: string;
+    enableBureau: boolean;
+    storeName: string;
+    _id: string;
+    faqs: faqs[];
+    categories: Category[];
+    domain: string;
+    contacts: contacts;
+    header: header;
+    mainColor: string;
+    thanks: thanks;
+    deliveryCompany: deliveryCompany;
+    facebookPixel?: pixel;
+    tiktokPixel?: pixel;
+    ProductCardType: string,
     CategoryCardType: string,
 }
 
 export interface deliveryCompany {
-   name: string;
-        key: string;
-        token: string;
-        img?: string
+    name: string;
+    key: string;
+    token: string;
+    img?: string
 }
 
 
 export interface StatePrice {
-        id: number,
-        code: string,
-        name: string,
-        ar_name: string,
-        stop_back: number,
-        prix_initial: number
-    }
-
- export interface pixel {
-  name: string;
-  id: string
- }   
-
-export interface faqs {
-  question: string;
-  answer: string;
-  id: string;
+    id: number,
+    code: string,
+    name: string,
+    ar_name: string,
+    stop_back: number,
+    prix_initial: number
 }
 
-export interface  contacts  { 
-        phone: string;
-        instagram: string;
-        tiktok: string;
-        facebook: string;
-        whatsapp: string
-    }  
+export interface pixel {
+    name: string;
+    id: string
+}
+
+export interface faqs {
+    question: string;
+    answer: string;
+    id: string;
+}
+
+export interface contacts {
+    phone: string;
+    instagram: string;
+    tiktok: string;
+    facebook: string;
+    whatsapp: string
+}
 
 
 
-export interface  header  {
-        name:  boolean ;
-        logo: boolean  ;
-        headerColor: string; // تم التعديل لـ 6 خانات للأمان
-        textColor: string;
-        barColor: string;
-    }    
+export interface header {
+    name: boolean;
+    logo: boolean;
+    headerColor: string; // تم التعديل لـ 6 خانات للأمان
+    textColor: string;
+    barColor: string;
+}
 
-   
 
-export interface thanks  {
-        img:  boolean;
-        title:  boolean;
-        about:  boolean;
-        homeButton:  boolean; // camelCase
-        phone:  boolean;
-        media:  boolean;
-        titleText:  string;
-        aboutText:  string ;
-    } 
+
+export interface thanks {
+    img: boolean;
+    title: boolean;
+    about: boolean;
+    homeButton: boolean; // camelCase
+    phone: boolean;
+    media: boolean;
+    titleText: string;
+    aboutText: string;
+}
 
 // ==========================================
 // 3. Product Interfaces
@@ -155,35 +155,36 @@ export interface Variant {
     options: VariantOption[];
 }
 
- 
 
-export interface product{
-  _id ?: string;
-   store: string;
-      name: string;
-      subTitel: string;
-      price: number  ;
-      Oldprice: number | string;
-      ShortDescription: string;
-      Description: string;
-      tags: string[];
-      note: string;
-      show:boolean;
-      type: string;  
-      images: string[] | [];
-      LadingPages: string[] | [];
-       colorOpions?: string[];
-        sizeOpions?: string[] ;
-      Offers?: Offer[],
+
+export interface product {
+    _id?: string;
+    store: string;
+    name: string;
+    subTitel: string;
+    price: number;
+    Oldprice: number | string;
+    ShortDescription: string;
+    Description: string;
+    tags: string[];
+    note: string;
+    show: boolean;
+    type: string;
+    images: string[] | [];
+    LadingPages: string[] | [];
+    colorOpions?: string[];
+    sizeOpions?: string[];
+    Offers?: Offer[];
+    isdegitalproduct: boolean;
 }
 
 export interface Offer {
-  id: number;
-  name: string;
-  Quantity: string;
-  price: string;
-  freedelevry: boolean;
-  topOffer: boolean;
+    id: number;
+    name: string;
+    Quantity: string;
+    price: string;
+    freedelevry: boolean;
+    topOffer: boolean;
 }
 
 
@@ -194,21 +195,22 @@ export interface StateData {
     prix_initial: number;
     stop_back: number;
 }
- 
+
 export interface CityData {
-  id: 22,
-        commune_name_ascii: string,
-        commune_name: string,
-        daira_name_ascii: string,
-        daira_name: string,
-        wilaya_code: string,
-        wilaya_name_ascii: string,
-        wilaya_name: string
+    id: 22,
+    commune_name_ascii: string,
+    commune_name: string,
+    daira_name_ascii: string,
+    daira_name: string,
+    wilaya_code: string,
+    wilaya_name_ascii: string,
+    wilaya_name: string
 }
 
 export interface CheckoutFormData {
     name: string;
     phone: string;
+    email: string;
     wilaya: string; // The code
     wilayaName: string; // The text name
     baladyia: string;

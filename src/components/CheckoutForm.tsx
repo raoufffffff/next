@@ -1,6 +1,6 @@
 'use client';
 
-import { User, Phone, ShoppingCart, Loader2    } from 'lucide-react';
+import { User, Phone, ShoppingCart, Loader2, Mail } from 'lucide-react';
 import VariantSelector from './CheckoutFormComponents/VariantSelector';
 import OfferSelector from './CheckoutFormComponents/OfferSelector';
 import { CheckoutFormProps } from '@/types';
@@ -9,11 +9,11 @@ import { LocationSelectors } from './CheckoutFormComponents/LocationSelectors';
 import { OrderSummary } from './CheckoutFormComponents/OrderSummary';
 import { DeliveryControl } from './CheckoutFormComponents/DeliveryControl';
 import StickyActions from './StickyActions';
- import states from '@/constans/states'; // Check your import path
+import states from '@/constans/states'; // Check your import path
 import { FormInput } from './CheckoutFormComponents/FormInput';
 
 // Sub-components
- 
+
 
 export default function CheckoutForm(props: CheckoutFormProps) {
     // 1. All Logic resides here
@@ -30,10 +30,10 @@ export default function CheckoutForm(props: CheckoutFormProps) {
 
     return (
         <div dir="rtl" className="relative font-sans text-right">
-            
+
             {/* Main Form Card */}
-            <div  ref={formRef} className="bg-white rounded-3xl shadow-2xl border border-indigo-50 p-6 md:p-8 sticky top-24">
-                
+            <div ref={formRef} className="bg-white rounded-3xl shadow-2xl border border-indigo-50 p-6 md:p-8 sticky top-24">
+
                 {/* Header */}
                 <div className="text-center mb-8">
                     <h3 className="text-2xl font-extrabold text-gray-900">إملأ الاستمارة للطلب</h3>
@@ -47,53 +47,71 @@ export default function CheckoutForm(props: CheckoutFormProps) {
 
                 {/* Form Inputs */}
                 <form
-                id="checkout-form"
-                onSubmit={handleSubmit} className="space-y-5 mt-8">
+                    id="checkout-form"
+                    onSubmit={handleSubmit} className="space-y-5 mt-8">
                     <div className="space-y-4">
-                        <FormInput 
-                            label="الاسم الكامل" 
-                            name="name" 
-                            Icon={User} 
-                            value={formData.name} 
-                            onChange={handleInputChange} 
-                            ref={nameInputRef} 
-                            placeholder="أدخل اسمك هنا" 
-                            required 
+                        <FormInput
+                            label="الاسم الكامل"
+                            name="name"
+                            Icon={User}
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            ref={nameInputRef}
+                            placeholder="أدخل اسمك هنا"
+                            required
                         />
-                        <FormInput 
-                        err={phoneErr}
-                        minLength={10}
-                            label="رقم الهاتف" 
-                            name="phone" 
-                            Icon={Phone} 
-                            value={formData.phone} 
-                            onChange={handleInputChange} 
-                            placeholder="05 XX XX XX XX" 
-                            dir="ltr" 
-                            className="text-right" 
-                            required 
+                        <FormInput
+                            err={phoneErr}
+                            minLength={10}
+                            label="رقم الهاتف"
+                            name="phone"
+                            Icon={Phone}
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            placeholder="05 XX XX XX XX"
+                            dir="ltr"
+                            className="text-right"
+                            required
                         />
+                        {product?.isdegitalproduct && (
+                            <FormInput
+                                label="البريد الإلكتروني"
+                                name="email"
+                                Icon={Mail}
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                placeholder="أدخل بريدك الإلكتروني هنا"
+                                type="email"
+                                required
+                            />
+                        )}
                     </div>
+                    {
+                        !product?.isdegitalproduct &&
+                        <>
+                            <LocationSelectors
+                                formData={formData}
+                                states={StoreDlevryPrices || states}
+                                availableCities={availableCities}
+                                onStateChange={handleStateChange}
+                                onCityChange={handleInputChange}
+                            />
 
-                    <LocationSelectors 
-                        formData={formData} 
-                        states={StoreDlevryPrices || states} 
-                        availableCities={availableCities} 
-                        onStateChange={handleStateChange} 
-                        onCityChange={handleInputChange} 
-                    />
+                            {beru && <DeliveryControl
 
-                   {beru && <DeliveryControl 
-                        formData={formData} 
-                        onTypeChange={handleInputChange} 
-                        onQtyChange={handleQuantityChange} 
-                    />}
+                                formData={formData}
+                                onTypeChange={handleInputChange}
+                                onQtyChange={handleQuantityChange}
+                            />}
+                        </>
+                    }
 
-                    <OrderSummary 
-                        freeDelivery={formData.freeDelivery} 
-                        deliveryCost={deliveryCostDisplay} 
-                        total={finalTotal} 
-                        mainColor={mainColor} 
+                    <OrderSummary
+                        isdegitalproduct={product?.isdegitalproduct}
+                        freeDelivery={formData.freeDelivery}
+                        deliveryCost={deliveryCostDisplay}
+                        total={finalTotal}
+                        mainColor={mainColor}
                     />
 
                     {/* Submit Button */}
@@ -119,10 +137,10 @@ export default function CheckoutForm(props: CheckoutFormProps) {
             </div>
 
             {/* Sticky Buttons */}
-            <StickyActions 
-                isVisible={showStickyBtn} 
-                 mainColor={mainColor} 
-                onClick={handleStickyClick} 
+            <StickyActions
+                isVisible={showStickyBtn}
+                mainColor={mainColor}
+                onClick={handleStickyClick}
             />
         </div>
     );

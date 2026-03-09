@@ -9,8 +9,8 @@ import states from '@/constans/states'; // Check your import path
 import { CheckoutFormData, CityData, Offer, CheckoutFormProps } from '@/types';
 
 export const useCheckoutLogic = (props: CheckoutFormProps) => {
-    const { product,  user,   facebookp, tiktokp } = props;
-    let  {StoreDlevryPrices} = props  
+    const { product, user, facebookp, tiktokp } = props;
+    let { StoreDlevryPrices } = props
     StoreDlevryPrices = StoreDlevryPrices || states
     const router = useRouter();
     const [phoneErr, setPhoneErr] = useState("")
@@ -40,6 +40,7 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
         baladyia: '',
         deliveryType: 'home',
         quantity: 1,
+        email: "",
         ride: 0,
         rideHome: 0,
         rideOffice: 0,
@@ -49,39 +50,39 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
     });
 
     // Scroll Effect
-   // Add this to your parent component or hook
- 
-useEffect(() => {
-   const handleScroll = () => {
-    const formElement = document.getElementById('checkout-form');
-    
-    if (formElement) {
-        const rect = formElement.getBoundingClientRect();
-        
-        // Is any part of the form currently in the viewport?
-        const isFormInView = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        // We only want the sticky button if:
-        // 1. The form is NOT in view (!isFormInView)
-        // 2. We have scrolled down at least 300px
-        if (!isFormInView  ) {
-            setShowStickyBtn(true);
-        } else {
-            setShowStickyBtn(false);
-        }
-    }
-};
+    // Add this to your parent component or hook
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-}, []);
+    useEffect(() => {
+        const handleScroll = () => {
+            const formElement = document.getElementById('checkout-form');
 
-const handleStickyClick = () => {
-    document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth' });
-};
+            if (formElement) {
+                const rect = formElement.getBoundingClientRect();
+
+                // Is any part of the form currently in the viewport?
+                const isFormInView = rect.top < window.innerHeight && rect.bottom > 0;
+
+                // We only want the sticky button if:
+                // 1. The form is NOT in view (!isFormInView)
+                // 2. We have scrolled down at least 300px
+                if (!isFormInView) {
+                    setShowStickyBtn(true);
+                } else {
+                    setShowStickyBtn(false);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const handleStickyClick = () => {
+        document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     // Handlers
-    
+
 
     const handleOfferSelect = (offer: Offer) => {
         if (selectedOffer?.id === offer.id) {
@@ -135,7 +136,7 @@ const handleStickyClick = () => {
             }));
             return;
         }
-         if (name === 'phone') validatePhone(value);
+        if (name === 'phone') validatePhone(value);
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -148,41 +149,42 @@ const handleStickyClick = () => {
             deliveryCostDisplay: deliveryCost,
         };
     }, [formData, productBasePrice, selectedOffer]);
-const validatePhone = (value: string) => {
-  if (!value.startsWith('0')) {
-    setPhoneErr('رقم الهاتف يجب أن يبدأ بـ 0');
-  } else if (value.replace(/\s/g, '').length !== 10) {
-    setPhoneErr('رقم الهاتف يجب أن يتكون من 10 أرقام');
-  } else {
-    setPhoneErr('');
-  }
-};
+    const validatePhone = (value: string) => {
+        if (!value.startsWith('0')) {
+            setPhoneErr('رقم الهاتف يجب أن يبدأ بـ 0');
+        } else if (value.replace(/\s/g, '').length !== 10) {
+            setPhoneErr('رقم الهاتف يجب أن يتكون من 10 أرقام');
+        } else {
+            setPhoneErr('');
+        }
+    };
     // Submit Logic
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.wilaya) return alert('يرجى اختيار الولاية');
-         setIsSubmitting(true);
+        if (!formData.wilaya && !product?.isdegitalproduct) return alert('يرجى اختيار الولاية');
+        setIsSubmitting(true);
         try {
             const orderPayload = {
                 item: {
- ...formData,
-                state: formData.wilayaName,
-                city: formData.baladyia,
-                productData: product,
-                ride: formData.freeDelivery ? 0 : formData.ride,
-                store: product.store,
-                price: product.price,
-                total: finalTotal,
-                color: selectedColor,
-                size: selectedSize,
-                                user: user,
-                home: formData.deliveryType === 'home',
+                    ...formData,
+                    state: formData.wilayaName,
+                    city: formData.baladyia,
+                    productData: product,
+                    ride: formData.freeDelivery ? 0 : formData.ride,
+                    store: product.store,
+                    price: product.price,
+                    total: finalTotal,
+                    color: selectedColor,
+                    size: selectedSize,
+                    user: user,
+                    email: formData.email,
+                    home: formData.deliveryType === 'home',
                 },
                 user: user
-               
+
             };
- console.log(orderPayload);
- 
+            console.log(orderPayload);
+
             await axios.post('https://api.next-commerce.shop/api/public/orders', orderPayload);
 
             if (facebookp) {
