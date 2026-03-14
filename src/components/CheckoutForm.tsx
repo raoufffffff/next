@@ -23,7 +23,7 @@ export default function CheckoutForm(props: CheckoutFormProps) {
         colorOptions, sizeOptions, offers,
         setSelectedColor, setSelectedSize, handleOfferSelect,
         handleQuantityChange, handleStateChange, handleInputChange, handleSubmit, handleStickyClick,
-        formRef, nameInputRef, phoneErr
+        formRef, nameInputRef, phoneErr,
     } = useCheckoutLogic(props);
 
     const { mainColor = '#4F46ff', product, StoreDlevryPrices, beru } = props;

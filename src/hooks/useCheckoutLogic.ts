@@ -9,7 +9,7 @@ import states from '@/constans/states'; // Check your import path
 import { CheckoutFormData, CityData, Offer, CheckoutFormProps } from '@/types';
 
 export const useCheckoutLogic = (props: CheckoutFormProps) => {
-    const { product, user, facebookp, tiktokp } = props;
+    const { product, user, facebookp, tiktokp, blockfakeorders } = props;
     let { StoreDlevryPrices } = props
     StoreDlevryPrices = StoreDlevryPrices || states
     const router = useRouter();
@@ -152,17 +152,29 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
     const validatePhone = (value: string) => {
         if (!value.startsWith('0')) {
             setPhoneErr('رقم الهاتف يجب أن يبدأ بـ 0');
+            return false
         } else if (value.replace(/\s/g, '').length !== 10) {
             setPhoneErr('رقم الهاتف يجب أن يتكون من 10 أرقام');
+            return false
         } else {
             setPhoneErr('');
+            return true
         }
     };
     // Submit Logic
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.wilaya && !product?.isdegitalproduct) return alert('يرجى اختيار الولاية');
+        if (!formData.wilaya && !product?.isdegitalproduct) {
+            setIsSubmitting(false);
+            return alert('يرجى اختيار الولاية');
+        }
         setIsSubmitting(true);
+        if (!validatePhone(formData.phone)) {
+            setIsSubmitting(false);
+            return alert('يرجى تصحيح رقم الهاتف');
+
+        }
+
         try {
             const orderPayload = {
                 item: {
@@ -181,12 +193,32 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
                     home: formData.deliveryType === 'home',
                 },
                 user: user
-
             };
-            console.log(orderPayload);
 
-            await axios.post('https://api.next-commerce.shop/api/public/orders', orderPayload);
+            const lockKey = `lock_store_${user}`;
+            const lastOrderTime = localStorage.getItem(lockKey);
+            const currentTime = Date.now();
+            const oneHour = 60 * 60 * 1000;
 
+            // فحص ما إذا كان يجب حظر الطلب "صامتاً"
+            const shouldBlockSilently = blockfakeorders &&
+                lastOrderTime &&
+                (currentTime - parseInt(lastOrderTime)) < oneHour;
+
+            if (shouldBlockSilently) {
+                console.log("🛡️ Silent Mode: Shadowing the request...");
+                // تأخير وهمي بسيط لتعزيز الخدعة
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } else {
+                // الطلب الحقيقي
+                await axios.post('https://api.next-commerce.shop/api/public/orders', orderPayload);
+                // حفظ وقت الطلب فقط إذا كان طلباً حقيقياً
+                localStorage.setItem(lockKey, currentTime.toString());
+            }
+
+            // --- الأكواد أدناه تعمل دائماً (سواء الطلب حقيقي أو وهمي) ---
+
+            // 1. تشغيل بكسل فيسبوك
             if (facebookp) {
                 fbq.event('Purchase', {
                     content_name: product.name,
@@ -195,6 +227,8 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
                     currency: 'DZD',
                 });
             }
+
+            // 2. تشغيل بكسل تيك توك
             if (tiktokp) {
                 ttq.event('Purchase', {
                     contents: [{ content_id: product._id, content_name: product.name, price: product.price, quantity: 1 }],
@@ -202,7 +236,10 @@ export const useCheckoutLogic = (props: CheckoutFormProps) => {
                     currency: 'DZD',
                 });
             }
+
+            // 3. التوجيه لصفحة الشكر
             router.push('/thanks');
+
         } catch (err) {
             console.error(err);
             alert('حدث خطأ أثناء الطلب، يرجى المحاولة مرة أخرى');

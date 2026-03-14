@@ -77,6 +77,7 @@ export interface Store {
     tiktokPixel?: pixel;
     ProductCardType: string,
     CategoryCardType: string,
+    blockfakeorders: boolean;
 }
 
 export interface deliveryCompany {
@@ -225,6 +226,7 @@ export interface CheckoutFormData {
 }
 
 export interface CheckoutFormProps {
+    blockfakeorders: boolean;
     beru: boolean;
     user?: string
     product: product;
